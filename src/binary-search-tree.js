@@ -67,24 +67,35 @@ class BinarySearchTree {
     }
   }
   remove(data) {
-    throw new NotImplementedError("Not implemented");
-    // remove line with error and write your code here
-    // this.removeNode(this.root, data);
+    // корень повторно инициализируется с
+    // корень модифицированного дерева.
+    this.rootNode = this.removeNode(this.rootNode, data);
   }
-  removeNode(node, data) {
-    if (node === null) {
-      return null;
-      // если данные, которые нужно удалить, меньше, чем данные корня, переходим к левому поддереву
-    } else if (data < node.data) {
-      node.left = this.removeNode(node.left, data);
+
+  // Метод для удаления узла с
+  // предоставленные данные
+  // повторяется по дереву, чтобы найти
+  // данные и удаляем их
+  removeNode(node, key) {
+    // если корень нулевой, то дерево
+    // пусто
+    if (node === null) return null;
+    // если данные для удаления меньше чем
+    // корни данных затем перемещаемся в левое поддерево
+    else if (key < node.data) {
+      node.left = this.removeNode(node.left, key);
       return node;
-      // если данные, которые нужно удалить, больше, чем данные корня, переходим к правому поддереву
-    } else if (data > node.data) {
-      node.right = this.removeNode(node.right, data);
+    }
+    // если данные для удаления больше чем
+    // корни данных затем перемещаются в правильное поддерево
+    else if (key > node.data) {
+      node.right = this.removeNode(node.right, key);
       return node;
-      // если данные такие как данные корня, удаляем узел
-    } else {
-      // удаляем узел без потомков (листовой узел (leaf) или крайний)
+    }
+    // если данные похожи на данные корня
+    // затем удаляем этот узел
+    else {
+      // удаляем узел без детей
       if (node.left === null && node.right === null) {
         node = null;
         return node;
@@ -97,19 +108,27 @@ class BinarySearchTree {
         node = node.left;
         return node;
       }
-      // удаляем узел с двумя потомками
-      // minNode правого поддерева хранится в новом узле
-      let newNode = this.minNode(node.right);
-      node.data = newNode.data;
-      node.right = this.removeNode(node.right, newNode.data);
+      // Удаление узла с двумя детьми
+      // минимальный узел поддерева rigt
+      // хранится в aux
+      var aux = this.findMinNode(node.right);
+      node.data = aux.data;
+      node.right = this.removeNode(node.right, aux.data);
       return node;
     }
   }
-  // minNode(node) {
-  //   // если слева от узла ноль тогда это должен быть минимальный узел
-  //   if (node.left === null) return node;
-  //   else return this.findMinNode(node.left);
-  // }
+
+  // Вспомогательная функция
+
+  // findMinNode ()
+  // находит минимальный узел в дереве
+  // поиск начинается с данного узла
+  findMinNode(node) {
+    // если слева от узла ноль
+    // тогда это должен быть минимальный узел
+    if (node.left === null) return node;
+    else return this.findMinNode(node.left);
+  }
   min() {
     //throw new NotImplementedError("Not implemented");
     // remove line with error and write your code here
